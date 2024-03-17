@@ -1,3 +1,2 @@
 # Goals
-- Homepage
 - Port Doom
