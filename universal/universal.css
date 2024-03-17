@@ -1,12 +1,19 @@
-html {
-  height:100%;
-  width: 100%;
+body {
   background-color: #040b10;
 }
+
 .header {
   text-align: center;
+}
+
+a {
   color: cadetblue;
 }
-a {
+
+h1 {
+  color:cadetblue;
+}
+
+h3 {
   color: cadetblue;
 }
