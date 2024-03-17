@@ -5,14 +5,8 @@ html {
 }
 .header {
   text-align: center;
-}
-
-h1 {
-  color:cadetblue;
-}
-hr {
   color: cadetblue;
 }
-h3 {
+a {
   color: cadetblue;
 }
