@@ -6,6 +6,13 @@ html {
 .header {
   text-align: center;
 }
-a {
-  
+
+h1 {
+  color:cadetblue;
+}
+hr {
+  color: cadetblue;
+}
+h3 {
+  color: cadetblue;
 }
