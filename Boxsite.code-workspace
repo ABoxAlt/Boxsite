@@ -2,7 +2,7 @@
 	"folders": [
 		{
 			"name": "Boxsite",
-			"path": "/index/index.html"
+			"path": "./index/index.html"
 		}
 	],
 	"settings": {}
