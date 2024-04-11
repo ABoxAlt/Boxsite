@@ -1,5 +1,14 @@
+/* 
+Color Pallete
+Body - > #1C7C54
+Links - > #DEF4C6
+Others
+#73E2A7
+#1B512D
+#B1CF5F
+*/
 body {
-  background-color: #040b10;
+  background-color: #1C7C54;
 }
 
 .header {
@@ -7,13 +16,13 @@ body {
 }
 
 a {
-  color: cadetblue;
+  color: #DEF4C6;
 }
 
 h1 {
-  color:cadetblue;
+  color:#DEF4C6;
 }
 
 h3 {
-  color: cadetblue;
+  color: #DEF4C6;
 }

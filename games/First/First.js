@@ -1,8 +1,8 @@
-const canvas = document.getElementById('game');
+// html elements declaration
+const canvas = document.querySelector('#game');
 const ctx = canvas.getContext('2d');
-let timeout = 60;
-function drawGame() {
-  setTimeout(drawGame, 1000 / timeout);
-}
 
-drawGame();
+
+
+ctx.fillStyle = '#1B512D';
+ctx.fillRect(0, 0, canvas.width, canvas.height);
