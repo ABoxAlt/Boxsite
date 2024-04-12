@@ -88,7 +88,7 @@ function removeSquare(squareNum) {
   if (getColor(board[squareNum]) == curColor) {
     board[squareNum] = -1;
     checkBoard();
-  } else if (squareNum != -1) {
+  } else if (squareNum != -1 && getColor(board[squareNum]) != 'white') {
     err --;
   }
 }
