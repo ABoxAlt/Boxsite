@@ -89,7 +89,6 @@ function removeSquare(squareNum) {
     board[squareNum] = -1;
     checkBoard();
   } else if (squareNum != -1 && getColor(board[squareNum]) != 'white') {
-    console.log(getColor(board[squareNum]) != 'white');
     err --;
   }
 }
