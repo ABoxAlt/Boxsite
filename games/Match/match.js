@@ -20,18 +20,6 @@ let mouseData = {
   y:0,
   input:false
 }
-// this will be the representation of the colors
-/*
-0 -> red
-1 -> orange
-2 -> yellow
-3 -> green
-4 -> blue
-5 -> purple
-6 -> brown
-7 -> pink
-8 -> grey
-*/
 let board = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 // event listeners & their functions
 
@@ -51,11 +39,11 @@ function mouseClick(e) {
 // generates a new board
 function generateBoard() {
   board = [];
-  curColor = getColor(Math.floor(Math.random() * 8));
+  curColor = getColor(Math.floor(Math.random() * 9));
   while (!board.some((x) => getColor(x) == curColor)) {
     board = [];
     for (let i = 0; i < 9; i++) {
-      board.push(Math.floor(Math.random() * 8));
+      board.push(Math.floor(Math.random() * 9));
     }
   }
 }
@@ -120,7 +108,7 @@ function getColor(num) {
     case 5:
       return 'purple';
     case 6:
-      return 'brown';
+      return 'saddlebrown';
     case 7:
       return 'pink';
     case 8:
