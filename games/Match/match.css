@@ -1,0 +1,12 @@
+canvas {
+  border: solid 3px black;
+}
+#gamespace {
+  text-align:center;
+}
+#score {
+  font-size: 35px;
+}
+#timer {
+  font-size: 35px;
+}
