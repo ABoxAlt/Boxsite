@@ -181,6 +181,7 @@ async function gameLoop() {
     }
     
   }
+  await waitFor(2000);
   game = false;
 }
 ctx.save();
