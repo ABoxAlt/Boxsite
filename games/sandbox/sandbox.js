@@ -13,6 +13,10 @@ let mouseData = {
 }
 // Cans on canvas
 const cans = [];
+// Floor levels
+// -- Will be universal floors, can be passed through when they are being held but otherwise are solid
+// -- All Y coordinates
+
 
 // Event listeners and their functions
 canvas.addEventListener('mousemove', mouseMove);
@@ -35,7 +39,7 @@ function mouseClick(e) {
 
 function spawn() {
   cans.push(new Can(mouseData.x, mouseData.y, 'red'));
-  console.log(cans[cans.length - 1].x);
+  console.log(cans[cans.length - 1].y);
 }
 
 // Paint the Cursor
@@ -46,20 +50,12 @@ function paintCursor() {
   ctx.restore();
 }
 
-function paintCans() {
-  for (const can of cans) {
-    ctx.save();
-    ctx.fillStyle = can.color;
-    ctx.fillRect(can.x, can.y, 20, 40);
-    ctx.restore();
-  }
-}
+
 
 function paint() {
   ctx.fillStyle = 'navy';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   paintCursor();
-  paintCans();
 }
 
 async function gameloop() {
@@ -74,6 +70,9 @@ async function gameloop() {
       }
     }
     paint();
+    for (const can of cans) {
+      can.tick(ctx);
+    }
   }
 }
 
