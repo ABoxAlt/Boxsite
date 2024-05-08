@@ -1,9 +1,10 @@
-const floors = [550];
 export class Can {
+  floors = [550];
   x = 0;
   y = 0;
   color = 'red';
   height = 40;
+  width = 20;
   // velocity
   velX = 0;
   velY = this.height / 4;
@@ -14,8 +15,9 @@ export class Can {
     this.y = Y;
     this.color = Color;
   }
+
   fall() {
-    for (const floor of floors) {
+    for (const floor of this.floors) {
       if (this.y + this.height < floor && this.y + this.height + this.velY < floor) {
         this.y += this.velY;
       } else if (this.y + this.height < floor && this.y + this.height + this.velY >= floor) {
@@ -24,11 +26,22 @@ export class Can {
       }
     }
   }
-  
+
+  moveTo(X, Y) {
+    this.x = X;
+    this.y = Y
+  }
+
+  touchingCan(objX, objY) {
+    if (objX >= this.x && objX <= this.x + this.width && objY >= this.y && objY <= this.y + this.height) {
+      return true;
+    }
+  }
+
   paint(ctx) {
     ctx.save();
     ctx.fillStyle = this.color;
-    ctx.fillRect(this.x, this.y, 20, this.height);
+    ctx.fillRect(this.x, this.y, this.width, this.height);
     ctx.restore();
   }
 
@@ -38,4 +51,6 @@ export class Can {
     }
     this.paint(ctx);
   }
+
+
 }
