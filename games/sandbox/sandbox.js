@@ -9,11 +9,14 @@ let mouseData = {
   x:0,
   y:0,
   state: 0,
-  input: -1
-}
+  input: -1,
+  objInHand: -1,
+};
 const universalFloors = [550];
 // Cans on canvas
-const cans = [];
+const objects = {
+  Cans: []
+};
 // Floor levels
 // -- Will be universal floors, can be passed through when they are being held but otherwise are solid
 // -- All Y coordinates
@@ -39,28 +42,52 @@ function mouseClick(e) {
   }
 }
 
+
 function rightMouseClick(e) {
   e.preventDefault();
   mouseData.input = 1;
 }
 
 // Cursor ability functions
-function spawn() {
+function spawn(height) {
   for (const floor of universalFloors) {
-    if (mouseData.y > floor) {
-      console.log('returned');
+    if (mouseData.y > floor - height) {
+      console.log('Can attempted to spawn within the ground.');
       return;
     }
   }
-  cans.push(new Can(mouseData.x, mouseData.y, 'red'));
+  objects.Cans.push(new Can(mouseData.x, mouseData.y, height, 'red'));
 }
 
 function shoot() 
 {
-  for (let can of cans) {
+  for (let can of objects.Cans) {
     if (can.touchingCan(mouseData.x, mouseData.y)) {
-      cans.splice(cans.indexOf(can), 1);
+      objects.Cans.splice(objects.Cans.indexOf(can), 1);
       can = 0;
+    }
+  }
+}
+
+function moveObject() {
+  if (mouseData.objInHand == -1) {
+    for (const type of Object.values(objects)) {
+      for (const thing of type) {
+        if (mouseData.x >= thing.x && mouseData.x <= thing.x + thing.width &&
+            mouseData.y >= thing.y && mouseData.y <= thing.y + thing.height
+        ) {
+          mouseData.objInHand = thing;
+          mouseData.objInHand.pickedUp = true;
+        }
+      }
+    }
+  } else {
+    for (const floor of universalFloors) {
+      if (mouseData.y < floor - mouseData.objInHand.height) {
+        mouseData.objInHand.pickedUp = false;
+        mouseData.objInHand.resetYVel();
+        mouseData.objInHand = -1;
+      }
     }
   }
 }
@@ -95,10 +122,11 @@ async function gameloop() {
     if (mouseData.input == 0) {
       switch (mouseData.state) {
         case 0:
-          spawn();
+          spawn(40);
           mouseData.input = -1;
           break;
         case 1:
+          moveObject();
           mouseData.input = -1;
           break;
         case 2:
@@ -113,9 +141,11 @@ async function gameloop() {
       }
       mouseData.input = -1;
       console.log(mouseData.state);
+    } else if (mouseData.objInHand != -1) {
+      mouseData.objInHand.moveTo(mouseData.x, mouseData.y);
     }
     paint();
-    for (const can of cans) {
+    for (const can of objects.Cans) {
       can.tick(ctx);
     }
     paintCursor();

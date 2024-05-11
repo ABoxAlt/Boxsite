@@ -2,18 +2,24 @@ export class Can {
   floors = [550];
   x = 0;
   y = 0;
+  pickedUp = false;
   color = 'red';
   height = 40;
   width = 20;
   // velocity
   velX = 0;
-  velY = this.height / 4;
+  velY = 1;
+  standardVelocityY = .1;
 
-
-  constructor(X, Y, Color) {
+  constructor(X, Y, Height, Color) {
     this.x = X;
     this.y = Y;
     this.color = Color;
+    this.height = Height;
+  }
+
+  resetYVel() {
+    this.velY = this.standardVelocityY;
   }
 
   fall() {
@@ -22,8 +28,18 @@ export class Can {
         this.y += this.velY;
       } else if (this.y + this.height < floor && this.y + this.height + this.velY >= floor) {
         this.y = floor - this.height;
-        this.velY = 0;
+        this.velY = -(this.velY / 2);
+        return;
+      } else if (this.velY < 0) {
+        this.y += this.velY;
       }
+    }
+    if (this.velY > 0) {
+      this.velY += this.standardVelocityY;
+    } else if (this.velY < 0 && this.velY + this.standardVelocityY <= 0) {
+      this.velY += this.standardVelocityY;
+    } else {
+      this.velY = this.standardVelocityY;
     }
   }
 
@@ -46,11 +62,37 @@ export class Can {
   }
 
   tick(ctx) {
-    if (this.velY > 0 || this.velX > 0) {
-      this.fall();
+    if (!this.pickedUp) {
+      if (this.velY != 0 || this.velX != 0) {
+        this.fall();
+      }
+    } else {
+      console.log('picked up');
     }
     this.paint(ctx);
   }
 
 
 }
+
+/*
+
+  fall() {
+    for (const floor of this.floors) {
+      if (this.y + this.height < floor && this.y + this.height + this.velY < floor) {
+        this.y += this.velY;
+      } else if (this.y + this.height < floor && this.y + this.height + this.velY >= floor) {
+        this.y = floor - this.height;
+        this.velY = -(this.velY / 2);
+        return;
+      } else if (this.velY < 0) {
+        this.y += this.velY;
+      }
+    }
+    if (this.velY > 0) {
+      this.velY += this.standardVelocityY;
+    } else if (this.velY < 0 && this.velY + this.standardVelocityY <= 0) {
+      this.velY += this.standardVelocityY;
+    }
+  }
+  */
