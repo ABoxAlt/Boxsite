@@ -10,6 +10,8 @@ export class Can {
   velX = 0;
   velY = 1;
   standardVelocityY = .1;
+  moveOffsetX = 0;
+  moveOffsetY = 0;
 
   constructor(X, Y, Height, Color) {
     this.x = X;
@@ -20,6 +22,10 @@ export class Can {
 
   resetYVel() {
     this.velY = this.standardVelocityY;
+  }
+
+  applyXVel(velocity) {
+    this.velX = velocity;
   }
 
   fall() {
@@ -44,8 +50,9 @@ export class Can {
   }
 
   moveTo(X, Y) {
-    this.x = X;
-    this.y = Y
+    console.log(this.moveOffsetX, this.moveOffsetY);
+    this.x = X - this.moveOffsetX;
+    this.y = Y - this.moveOffsetY;
   }
 
   touchingCan(objX, objY) {
@@ -67,7 +74,7 @@ export class Can {
         this.fall();
       }
     } else {
-      console.log('picked up');
+      // if it is picked up this will run
     }
     this.paint(ctx);
   }

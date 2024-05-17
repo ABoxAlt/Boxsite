@@ -76,8 +76,11 @@ function moveObject() {
         if (mouseData.x >= thing.x && mouseData.x <= thing.x + thing.width &&
             mouseData.y >= thing.y && mouseData.y <= thing.y + thing.height
         ) {
+
+          thing.moveOffsetX = mouseData.x - thing.x;
+          thing.moveOffsetY = mouseData.y - thing.y;
+          thing.pickedUp = true;
           mouseData.objInHand = thing;
-          mouseData.objInHand.pickedUp = true;
         }
       }
     }
@@ -86,6 +89,7 @@ function moveObject() {
       if (mouseData.y < floor - mouseData.objInHand.height) {
         mouseData.objInHand.pickedUp = false;
         mouseData.objInHand.resetYVel();
+        mouseData.objInHand.applyXVel(/*add in the calculations for mouse velocity*/);
         mouseData.objInHand = -1;
       }
     }
@@ -140,7 +144,6 @@ async function gameloop() {
         mouseData.state = 0;
       }
       mouseData.input = -1;
-      console.log(mouseData.state);
     } else if (mouseData.objInHand != -1) {
       mouseData.objInHand.moveTo(mouseData.x, mouseData.y);
     }
