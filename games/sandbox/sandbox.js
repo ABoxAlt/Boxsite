@@ -8,9 +8,12 @@ const ctx = canvas.getContext('2d');
 let mouseData = {
   x:0,
   y:0,
+  prevX:0,
+  prevY:0,
   state: 0,
   input: -1,
   objInHand: -1,
+  force: 4,
 };
 const universalFloors = [550];
 // Cans on canvas
@@ -28,11 +31,14 @@ canvas.addEventListener('click', mouseClick);
 canvas.addEventListener('contextmenu', rightMouseClick);
 
 function mouseMove(e) {
+  mouseData.prevX = mouseData.x;
+  mouseData.prevY = mouseData.y;
   mouseData.x = e.offsetX;
   mouseData.y = e.offsetY;
 }
 
 function mouseClick(e) {
+  // console.log(e.offsetX, e.offsetY);
   if (game) {
     mouseData.x = e.offsetX;
     mouseData.y = e.offsetY;
@@ -87,9 +93,14 @@ function moveObject() {
   } else {
     for (const floor of universalFloors) {
       if (mouseData.y < floor - mouseData.objInHand.height) {
+        console.log(mouseData.x);
         mouseData.objInHand.pickedUp = false;
-        mouseData.objInHand.resetYVel();
-        mouseData.objInHand.applyXVel(/*add in the calculations for mouse velocity*/);
+        console.log(mouseData.x - mouseData.prevX);
+        mouseData.objInHand.velY = (mouseData.y - mouseData.prevY) / mouseData.force;
+        if (mouseData.objInHand.velY > -1 && mouseData.objInHand.velY < 0 || mouseData.objInHand.velY < 1 && mouseData.objInHand.velY > 0) {
+          mouseData.objInHand.velY = -1;
+        } 
+        mouseData.objInHand.velX = (mouseData.x - mouseData.prevX) / mouseData.force;
         mouseData.objInHand = -1;
       }
     }

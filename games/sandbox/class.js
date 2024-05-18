@@ -1,5 +1,6 @@
 export class Can {
   floors = [550];
+  walls = [0, 800];
   x = 0;
   y = 0;
   pickedUp = false;
@@ -10,6 +11,7 @@ export class Can {
   velX = 0;
   velY = 1;
   standardVelocityY = .1;
+  standardVelocityX = .05;
   moveOffsetX = 0;
   moveOffsetY = 0;
 
@@ -22,10 +24,6 @@ export class Can {
 
   resetYVel() {
     this.velY = this.standardVelocityY;
-  }
-
-  applyXVel(velocity) {
-    this.velX = velocity;
   }
 
   fall() {
@@ -49,8 +47,45 @@ export class Can {
     }
   }
 
+  applyXVel() {
+    for (const wall of this.walls) {
+      if (this.velX > 0) {
+        if (this.x + this.width < wall && this.x + this.width + this.velX < wall) {
+          this.x += this.velX;
+          console.log('0', wall);
+          break;
+        } else if (this.x + this.width <= wall) {
+          this.x = wall - this.width;
+          this.velX *= -1;
+          console.log('1', wall);
+          break;
+        } 
+      }
+      if (this.velX < 0) {
+        if (this.x > wall && this.x + this.velX > wall) {
+          this.x += this.velX;
+          console.log('2', wall);
+          break;
+        } else if (this.x >= wall) {
+          // this is because velX will be negative when traveling to the right side of a wall
+          this.x = wall + this.width;
+          this.velX *= -1;
+          console.log('3', wall);
+          break;
+        }
+      }
+    }
+
+    if (this.velX < 1 && this.velX > -1) {
+      this.velX = 0;
+    } else if (this.velX > 0) {
+      this.velX -= this.standardVelocityX;
+    } else if (this.velX < 0) {
+      this.velX += this.standardVelocityX;
+    }
+  }
+
   moveTo(X, Y) {
-    console.log(this.moveOffsetX, this.moveOffsetY);
     this.x = X - this.moveOffsetX;
     this.y = Y - this.moveOffsetY;
   }
@@ -70,8 +105,11 @@ export class Can {
 
   tick(ctx) {
     if (!this.pickedUp) {
-      if (this.velY != 0 || this.velX != 0) {
+      if (this.velY != 0) {
         this.fall();
+      }
+      if (this.velX != 0) {
+        this.applyXVel();
       }
     } else {
       // if it is picked up this will run
