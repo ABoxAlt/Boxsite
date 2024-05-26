@@ -4,6 +4,7 @@ import {waitFor} from '../../universal/universal.js';
 // Canvas and ctx
 const canvas = document.querySelector('#game');
 const ctx = canvas.getContext('2d');
+
 // Mouse Data
 let mouseData = {
   x:0,
@@ -137,7 +138,7 @@ async function gameloop() {
     if (mouseData.input == 0) {
       switch (mouseData.state) {
         case 0:
-          spawn(40);
+          spawn(80);
           mouseData.input = -1;
           break;
         case 1:

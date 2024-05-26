@@ -1,3 +1,4 @@
+const canImg = document.querySelector("#canImg");
 export class Can {
   floors = [550];
   walls = [0, 800];
@@ -5,8 +6,8 @@ export class Can {
   y = 0;
   pickedUp = false;
   color = 'red';
-  height = 40;
-  width = 20;
+  height = 80;
+  width = 40;
   // velocity
   velX = 0;
   velY = 1;
@@ -99,7 +100,7 @@ export class Can {
   paint(ctx) {
     ctx.save();
     ctx.fillStyle = this.color;
-    ctx.fillRect(this.x, this.y, this.width, this.height);
+    ctx.drawImage(canImg, this.x, this.y, this.width, this.height);
     ctx.restore();
   }
 
