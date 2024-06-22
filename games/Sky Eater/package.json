@@ -1,0 +1,13 @@
+{
+  "name": "Skyeater",
+  "version": "1.0.0",
+  "private": true,
+  "devDependencies": {
+    "typescript": "*",
+    "esbuild": "*"
+  },
+  "scripts": {
+    "build": "deploy.bat",
+    "serve": "esbuild skyeater.ts --bundle --servedir=. --outdir=."
+  }
+}
