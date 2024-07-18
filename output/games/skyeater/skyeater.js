@@ -8,6 +8,6 @@
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
   };
-  console.log("code ran");
+  console.log("code ran 2");
   new SkyEater();
 })();

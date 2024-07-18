@@ -7,5 +7,5 @@ class SkyEater {
   }
 
 }
-console.log("code ran");
+console.log("code ran 2");
 new SkyEater();
