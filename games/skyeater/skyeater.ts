@@ -1,4 +1,3 @@
-const tempImg = document.querySelector("#tempImage") as HTMLImageElement;
 class textWriter {
   constructor() {}
 
@@ -7,21 +6,27 @@ class textWriter {
   }
 
   public writeText(text:string, fontStyle:string, size:number, x:number, y:number, ctx:CanvasRenderingContext2D) {
+    const startX = x;
     for (const character of text) {
-      ctx.drawImage(this.characterFinder(character, fontStyle), x, y, size, size)
+      ctx.drawImage(this.characterFinder(character, fontStyle), x, y, size, size);
+      x += size * 1.2;
     }
   }
 
   private characterFinder(character:string, fontStyle:string) {
+    const returnImg = new Image();
+    returnImg.src = "./Fonts/Title/Title00.png";
     if (fontStyle == "Title") {
-      switch (character) {
-        case "A":
-          return tempImg;
+      switch (character.toLowerCase()) {
+        case "a":
+          returnImg.src = "./Fonts/Title/Title00.png";
+          break;
         default:
-          return tempImg;
+          returnImg.src = "./Fonts/Title/Title00.png";
+          break;
       }
     }
-    return tempImg;
+    return returnImg;
   }
 }
 
@@ -31,10 +36,10 @@ class SkyEater {
   constructor() {
     const canvas = document.getElementById('game') as HTMLCanvasElement;
     const ctx = canvas.getContext('2d');
-    ctx!.fillStyle = 'black';
+    ctx!.fillStyle = 'white';
     ctx!.fillRect(0, 0, canvas.width, canvas.height);
 
-    //this.textWriter.writeText('e', 'Title', 100, 100, 100, ctx!);
+    this.textWriter.writeText('a', 'Title', 100, 100, 100, ctx!);
   }
 
 }

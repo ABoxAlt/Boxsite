@@ -1,26 +1,29 @@
 (() => {
   // skyeater.ts
-  var tempImg = document.querySelector("#tempImage");
   var textWriter = class {
     constructor() {
     }
     writeTitle(text, ctx) {
     }
     writeText(text, fontStyle, size, x, y, ctx) {
+      const startX = x;
       for (const character of text) {
         ctx.drawImage(this.characterFinder(character, fontStyle), x, y, size, size);
+        x += size * 1.2;
       }
     }
     characterFinder(character, fontStyle) {
+      const returnImg = new Image();
+      returnImg.src = "./Fonts/Title/Title00.png";
       if (fontStyle == "Title") {
-        switch (character) {
-          case "A":
-            return tempImg;
+        switch (character.toLowerCase()) {
+          case "a":
+            returnImg.src = "./Fonts/Title/Title00.png";
           default:
-            return tempImg;
+            returnImg.src = "./Fonts/Title/Title00.png";
         }
       }
-      return tempImg;
+      return returnImg;
     }
   };
   var SkyEater = class {
@@ -28,8 +31,9 @@
     constructor() {
       const canvas = document.getElementById("game");
       const ctx = canvas.getContext("2d");
-      ctx.fillStyle = "black";
+      ctx.fillStyle = "white";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
+      this.textWriter.writeText("a", "Title", 100, 100, 100, ctx);
     }
   };
   new SkyEater();
