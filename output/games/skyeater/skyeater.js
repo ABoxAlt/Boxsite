@@ -5,18 +5,6 @@
     }
     writeTitle(text, ctx) {
     }
-    testFunction() {
-      return new Promise((resolve, reject) => {
-        const testImage = new Image();
-        testImage.src = "./Fonts/Title.png";
-        testImage.onload = () => {
-          resolve(testImage);
-        };
-        testImage.onerror = (e) => {
-          reject(e);
-        };
-      });
-    }
     writeText(text, fontStyle, size, x, y, ctx) {
       const startX = x;
       for (const character of text) {
@@ -51,21 +39,25 @@
       const ctx = canvas.getContext("2d");
       this.loadResources(ctx);
     }
-    async loadResourcesAsync(ctx) {
+    async loadResources(ctx) {
       try {
-        const [img1, img2] = await Promise.all([this.textWriter.testFunction(), this.textWriter.testFunction()]);
+        const [img1, img2] = await Promise.all([this.loadImage(), this.loadImage()]);
         ctx.drawImage(img1, 0, 0, 500, 500, 0, 0, 100, 100);
         ctx.drawImage(img2, 0, 0, 500, 500, 100, 100, 100, 100);
       } catch (e) {
         console.error("WTF?", e);
       }
     }
-    loadResources(ctx) {
-      Promise.all([this.textWriter.testFunction(), this.textWriter.testFunction()]).then(([img1, img2]) => {
-        ctx.drawImage(img1, 0, 0, 500, 500, 0, 0, 100, 100);
-        ctx.drawImage(img2, 0, 0, 500, 500, 100, 100, 100, 100);
-      }).catch((e) => {
-        console.error("WTF?", e);
+    loadImage() {
+      return new Promise((resolve, reject) => {
+        const testImage = new Image();
+        testImage.src = "./Fonts/Title.png";
+        testImage.onload = () => {
+          resolve(testImage);
+        };
+        testImage.onerror = (e) => {
+          reject(e);
+        };
       });
     }
   };
