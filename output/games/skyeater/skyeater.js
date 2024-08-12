@@ -3,63 +3,101 @@
   var TextWriter = class {
     constructor() {
     }
-    writeTitle(text, ctx) {
-    }
     writeText(text, fontStyle, size, x, y, ctx) {
       const startX = x;
       for (const character of text) {
         x += size * 1.2;
       }
     }
-    characterFinder(character, fontStyle) {
-      const returnImg = new Image(20, 20);
-      let sx, sy, sw, sh = 0;
-      if (fontStyle == "Title") {
-        returnImg.src = "./Fonts/Title.png";
-        sw = 500;
-        sh = 500;
-        switch (character.toLowerCase()) {
-          case "a":
-            sx = 0;
-            sy = 0;
-            break;
-          default:
-            sx = 0;
-            sy = 0;
-            break;
-        }
-      }
-      return createImageBitmap(returnImg, sx, sy, sw, sh);
-    }
   };
-  var SkyEater = class {
-    textWriter = new TextWriter();
+  var SpriteLib = class {
+    spriteLib;
+    isLoaded;
     constructor() {
-      const canvas = document.getElementById("game");
-      const ctx = canvas.getContext("2d");
-      this.loadResources(ctx);
+      let sprites = [];
+      this.isLoaded = this.loadResources(sprites);
+      this.spriteLib = sprites;
+      console.log(this.spriteLib[0]);
     }
-    async loadResources(ctx) {
+    async loadResources(sprites) {
       try {
-        const [img1, img2] = await Promise.all([this.loadImage(), this.loadImage()]);
-        ctx.drawImage(img1, 0, 0, 500, 500, 0, 0, 100, 100);
-        ctx.drawImage(img2, 0, 0, 500, 500, 100, 100, 100, 100);
+        const [testFont] = await Promise.all([this.loadImage("./Fonts/Title.png")]);
+        let spriteArray = [];
+        for (let i = 0; i < 26; i++) {
+          spriteArray.push(new Sprite(testFont, i % 5 * 500, Math.floor(i / 5) * 500, 500, 500));
+        }
+        let spriteSheet = new SpriteSheet(testFont);
+        spriteSheet.addAnimation(spriteArray);
+        sprites.push(spriteSheet);
       } catch (e) {
         console.error("WTF?", e);
+        throw e;
       }
     }
-    loadImage() {
+    // Loads individual images
+    loadImage(img) {
       return new Promise((resolve, reject) => {
-        const testImage = new Image();
-        testImage.src = "./Fonts/Title.png";
-        testImage.onload = () => {
-          resolve(testImage);
+        const newImage = new Image();
+        newImage.src = img;
+        newImage.onload = () => {
+          resolve(newImage);
         };
-        testImage.onerror = (e) => {
+        newImage.onerror = (e) => {
           reject(e);
         };
       });
     }
+    getSpriteSheet(sheetIdx) {
+      return this.spriteLib[sheetIdx].srcImg;
+    }
+    getAnimation(sheetIdx, animationIdx) {
+      return this.spriteLib[sheetIdx][animationIdx];
+    }
+    getSprite(sheetIdx, animationIdx, spriteIdx) {
+      return this.spriteLib[sheetIdx][animationIdx][spriteIdx];
+    }
+  };
+  var SpriteSheet = class {
+    spriteSheet = [];
+    srcImg;
+    constructor(SRC) {
+      this.srcImg = SRC;
+    }
+    addAnimation(animation) {
+      this.spriteSheet.push(animation);
+    }
+  };
+  var Sprite = class {
+    src;
+    sx;
+    sy;
+    sw;
+    sh;
+    constructor(Src, Sx, Sy, Sw, Sh) {
+      this.src = Src;
+      this.sx = Sx;
+      this.sy = Sy;
+      this.sw = Sw;
+      this.sh = Sh;
+    }
+  };
+  var SkyEater = class {
+    // Declaring Variables
+    canvas;
+    ctx;
+    textWriter = new TextWriter();
+    spriteLib;
+    constructor() {
+      this.canvas = document.getElementById("game");
+      this.ctx = this.canvas.getContext("2d");
+      this.spriteLib = new SpriteLib();
+      void this.run();
+    }
+    async run() {
+      await this.spriteLib.isLoaded;
+      this.ctx.drawImage(this.spriteLib.getSpriteSheet(0), 0, 0, 500, 500, 0, 0, 200, 200);
+    }
+    // Loads all images being used
   };
   new SkyEater();
 })();
