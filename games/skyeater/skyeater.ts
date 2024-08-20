@@ -13,16 +13,31 @@
 
 // Used to write in game text
 class TextWriter {
+  private letterSpacing = 1.1;
   constructor() {}
 
-  public writeText(text:string, fontStyle:string, size:number, x:number, y:number, ctx:CanvasRenderingContext2D) {
-    const startX = x;
-    for (const character of text) {
-      //ctx.drawImage(this.characterFinder(character, fontStyle), x, y, size, size);
-      x += size * 1.2;
+  private getLetterSpriteIdx(ASCIICode: number) {
+    return ASCIICode - 97;
+    // if the letter is lowercase a then this should return 0
+  }
+
+  private getSpriteSheetIdx(FontStyle: string) {
+    switch (FontStyle) {
+      case "Title":
+        this.letterSpacing = 1.1;
+        return 0
+      default:
+        throw new console.error("That is not a registered font");
     }
   }
 
+  public writeTitle(text: string, x: number, y: number, width: number, height: number, spritelib: SpriteLib, ctx: CanvasRenderingContext2D) {
+    this.letterSpacing = 1.1;
+    for (const letter of text) {
+      spritelib.drawSprite(0, 0, this.getLetterSpriteIdx(letter.toLowerCase().charCodeAt(0)), x, y, width, height, ctx);
+      x += width * this.letterSpacing;
+    }
+  }
 }
 
 class SpriteLib {
@@ -33,7 +48,6 @@ class SpriteLib {
     let sprites: Array<SpriteSheet> = [];
     this.isLoaded = this.loadResources(sprites);
     this.spriteLib = sprites;
-    console.log(this.spriteLib[0]);
   }
 
   private async loadResources(sprites:Array<SpriteSheet>) {
@@ -73,19 +87,21 @@ class SpriteLib {
     });
   }
 
-  public getSpriteSheet(sheetIdx: number) {
+  public getSpriteSheetImg(sheetIdx: number) {
     return this.spriteLib[sheetIdx].srcImg;
+  }
+  public getSpriteSheet(sheetIdx: number) {
+    return this.spriteLib[sheetIdx];
   }
 
   public getAnimation(sheetIdx: number, animationIdx: number) {
     return this.spriteLib[sheetIdx][animationIdx];
   }
 
-  public getSprite(sheetIdx: number, animationIdx: number, spriteIdx: number) {
-    return this.spriteLib[sheetIdx][animationIdx][spriteIdx];
+  public drawSprite(sheetIdx: number, animationIdx: number, spriteIdx: number, x: number, y: number, width: number, height: number, ctx:CanvasRenderingContext2D) {
+    const sprite = this.spriteLib[sheetIdx].spriteSheet[animationIdx][spriteIdx];
+    ctx.drawImage(sprite.src, sprite.sx, sprite.sy, sprite.sw, sprite.sh, x, y, width, height);
   }
-
-  
 }
 
 class SpriteSheet {
@@ -138,7 +154,7 @@ class SkyEater {
 
   async run() {
     await this.spriteLib.isLoaded;
-    this.ctx.drawImage(this.spriteLib.getSpriteSheet(0), 0, 0, 500, 500, 0, 0, 200, 200);
+    this.textWriter.writeTitle("Hello", 50, 50, 100, 100, this.spriteLib, this.ctx);
   }
 
   // Loads all images being used

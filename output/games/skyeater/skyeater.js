@@ -1,12 +1,26 @@
 (() => {
   // skyeater.ts
   var TextWriter = class {
+    letterSpacing = 1.1;
     constructor() {
     }
-    writeText(text, fontStyle, size, x, y, ctx) {
-      const startX = x;
-      for (const character of text) {
-        x += size * 1.2;
+    getLetterSpriteIdx(ASCIICode) {
+      return ASCIICode - 97;
+    }
+    getSpriteSheetIdx(FontStyle) {
+      switch (FontStyle) {
+        case "Title":
+          this.letterSpacing = 1.1;
+          return 0;
+        default:
+          throw new console.error("That is not a registered font");
+      }
+    }
+    writeTitle(text, x, y, width, height, spritelib, ctx) {
+      this.letterSpacing = 1.1;
+      for (const letter of text) {
+        spritelib.drawSprite(0, 0, this.getLetterSpriteIdx(letter.toLowerCase().charCodeAt(0)), x, y, width, height, ctx);
+        x += width * this.letterSpacing;
       }
     }
   };
@@ -17,7 +31,6 @@
       let sprites = [];
       this.isLoaded = this.loadResources(sprites);
       this.spriteLib = sprites;
-      console.log(this.spriteLib[0]);
     }
     async loadResources(sprites) {
       try {
@@ -47,14 +60,18 @@
         };
       });
     }
-    getSpriteSheet(sheetIdx) {
+    getSpriteSheetImg(sheetIdx) {
       return this.spriteLib[sheetIdx].srcImg;
+    }
+    getSpriteSheet(sheetIdx) {
+      return this.spriteLib[sheetIdx];
     }
     getAnimation(sheetIdx, animationIdx) {
       return this.spriteLib[sheetIdx][animationIdx];
     }
-    getSprite(sheetIdx, animationIdx, spriteIdx) {
-      return this.spriteLib[sheetIdx][animationIdx][spriteIdx];
+    drawSprite(sheetIdx, animationIdx, spriteIdx, x, y, width, height, ctx) {
+      const sprite = this.spriteLib[sheetIdx].spriteSheet[animationIdx][spriteIdx];
+      ctx.drawImage(sprite.src, sprite.sx, sprite.sy, sprite.sw, sprite.sh, x, y, width, height);
     }
   };
   var SpriteSheet = class {
@@ -95,7 +112,7 @@
     }
     async run() {
       await this.spriteLib.isLoaded;
-      this.ctx.drawImage(this.spriteLib.getSpriteSheet(0), 0, 0, 500, 500, 0, 0, 200, 200);
+      this.textWriter.writeTitle("Hello", 50, 50, 100, 100, this.spriteLib, this.ctx);
     }
     // Loads all images being used
   };
